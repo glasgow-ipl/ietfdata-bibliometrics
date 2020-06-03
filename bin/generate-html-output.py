@@ -40,17 +40,25 @@ env = Environment(
 
 template = env.get_template('index.html')
 
-plots = [
-            {"name": "RFCs, annual publications", "path": "%s/rfc-annual-publications.png" % (plot_subdir), "shortname": "rfc-annual-pub"},
-            {"name": "RFCs, annual publications (status)", "path": "%s/rfc-annual-publications-status.png" % (plot_subdir), "shortname": "rfc-annual-pub-status"},
-            {"name": "RFCs, annual publications (status, normalised)", "path": "%s/rfc-annual-publications-status-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-status-normalised"},
-            {"name": "RFCs, annual publications (streams)", "path": "%s/rfc-annual-publications-streams.png" % (plot_subdir), "shortname": "rfc-annual-pub-streams"},
-            {"name": "RFCs, annual publications (streams, normalised)", "path": "%s/rfc-annual-publications-streams-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-streams-normalised"},
-            {"name": "RFCs, annual publications (areas)", "path": "%s/rfc-annual-publications-areas.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas"},
-            {"name": "RFCs, annual publications (areas, normalised)", "path": "%s/rfc-annual-publications-areas-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas-normalised"},
-            {"name": "RFCs, annual publications (months)", "path": "%s/rfc-monthly-publications.png" % (plot_subdir), "shortname": "rfc-monthly-publications"},
-            {"name": "RFCs, annual publications (months, normalised)", "path": "%s/rfc-monthly-publications-norm.png" % (plot_subdir), "shortname": "rfc-monthly-publications-normalised"},
+plot_groups = [
+            {"name": "RFCs",
+             "subtitle": "Annual publications",
+             "plots" : [{"name": "All publications", "path": "%s/rfc-annual-publications.png" % (plot_subdir), "shortname": "rfc-annual-pub"},
+                        {"name": "By status", "path": "%s/rfc-annual-publications-status.png" % (plot_subdir), "shortname": "rfc-annual-pub-status"},
+                        {"name": "By stream", "path": "%s/rfc-annual-publications-streams.png" % (plot_subdir), "shortname": "rfc-annual-pub-streams"},
+                        {"name": "By area", "path": "%s/rfc-annual-publications-areas.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas"},
+                        {"name": "By month", "path": "%s/rfc-monthly-publications.png" % (plot_subdir), "shortname": "rfc-monthly-publications"},
+                       ]
+            },
+            {"name": "RFCs",
+             "subtitle": "Annual publications, normalised",
+             "plots" : [{"name": "By status, normalised", "path": "%s/rfc-annual-publications-status-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-status-normalised"},
+                        {"name": "By stream, normalised", "path": "%s/rfc-annual-publications-streams-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-streams-normalised"},
+                        {"name": "By area, normalised", "path": "%s/rfc-annual-publications-areas-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas-normalised"},
+                        {"name": "By month, normalised", "path": "%s/rfc-monthly-publications-norm.png" % (plot_subdir), "shortname": "rfc-monthly-publications-normalised"},
+                       ]
+            }
         ]
 
 with open('%s/index.html' % (output_dir), 'w') as indexHtmlFile:
-    indexHtmlFile.write(template.render(generation_ts=datetime.now(), plots=plots))
+    indexHtmlFile.write(template.render(generation_ts=datetime.now(), plot_groups=plot_groups))

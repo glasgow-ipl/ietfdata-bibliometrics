@@ -14,17 +14,27 @@
         <br><br>
         <div class="row">
             <div class="col-md-4" style="width: 20%;">
-                <div id="plot-list" class="list-group" style="top: 10px; position: sticky; position: -webkit-sticky;">
-                    {% for plot in plots %}
+                <div style="top: 10px; position: sticky; position: -webkit-sticky;">
+                {% for plot_group in plot_groups %}
+                <div id="plot-list" class="list-group">
+                    <li class="list-group-item disabled" aria-disabled="true">{{ plot_group.name }}<br><small>{{ plot_group.subtitle }}</small></li>
+                    {% for plot in plot_group.plots %}
                     <a class="list-group-item list-group-item-action" href="#{{ plot.shortname }}">{{ plot.name }}</a>
                     {% endfor %}
                 </div>
+                <br>
+                {% endfor %}
+            </div>
             </div>
             <div class="col-md-8">
                 <div data-spy="scroll" data-target="#plot-list" data-offset="0">
-                    {% for plot in plots %}
+                    {% for plot_group in plot_groups %}
+                    <h3>{{ plot_group.name }} <small class="text-muted">{{ plot_group.subtitle }}</small></lh3>
+                    {% for plot in plot_group.plots %}
                     <h4 id="{{ plot.shortname }}">{{ plot.name }}</h4>
                     <img src="{{ plot.path }}" width="100%" />
+                    {% endfor %}
+                    <hr>
                     {% endfor %}
                 </div>
             </div>
