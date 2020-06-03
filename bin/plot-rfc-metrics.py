@@ -146,11 +146,21 @@ with open("%s/rfc-annual-publications-status.csv" % (input_dir), "r") as annualR
         if status not in statuses:
             statuses.append(status)
         annual_pub_data_status[year][status] = int(count)
+    for year in annual_pub_data_status:
+        year_total = 0
+        for status in annual_pub_data_status[year]:
+            year_total += annual_pub_data_status[year][status]
+        annual_pub_data_status[year]["total"] = year_total
 
 x = sorted(list(annual_pub_data_status.keys()))
 y = [[annual_pub_data_status[year][status] for year in x] for status in statuses]
 
 plot_stack(x, y, 550, statuses, '%s/rfc-annual-publications-status.png' % (output_dir), "Publication Year", "Publication Count")
+
+x = sorted(list(annual_pub_data_status.keys()))
+y = [[(annual_pub_data_status[year][status]/annual_pub_data_status[year]["total"])*100 for year in x] for status in statuses]
+
+plot_stack(x, y, 110, statuses, '%s/rfc-annual-publications-status-norm.png' % (output_dir), "Publication Year", "Publication Percentage")
 
 annual_pub_data_month = {}
 months = []
