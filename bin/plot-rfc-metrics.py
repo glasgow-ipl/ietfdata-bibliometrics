@@ -92,11 +92,21 @@ with open("%s/rfc-annual-publications-streams.csv" % (input_dir), "r") as annual
         if stream not in streams:
             streams.append(stream)
         annual_pub_data_streams[year][stream] = int(count)
+    for year in annual_pub_data_streams:
+        year_total = 0
+        for stream in annual_pub_data_streams[year]:
+            year_total += annual_pub_data_streams[year][stream]
+        annual_pub_data_streams[year]["total"] = year_total
 
 x = sorted(list(annual_pub_data_streams.keys()))
 y = [[annual_pub_data_streams[year][stream] for year in x] for stream in streams]
 
 plot_stack(x, y, 550, streams, '%s/rfc-annual-publications-streams.png' % (output_dir), "Publication Year", "Publication Count")
+
+x = sorted(list(annual_pub_data_streams.keys()))
+y = [[(annual_pub_data_streams[year][stream]/annual_pub_data_streams[year]["total"])*100 for year in x] for stream in streams]
+
+plot_stack(x, y, 110, streams, '%s/rfc-annual-publications-streams-norm.png' % (output_dir), "Publication Year", "Publication Percentage")
 
 annual_pub_data_areas = {}
 areas = []
