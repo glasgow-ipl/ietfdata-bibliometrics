@@ -1,0 +1,66 @@
+# =================================================================================================
+# ietfdata-bibliometrics
+#
+# Copyright (C) 2020 University of Glasgow
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+# Output directory and subdirectories
+OUTPUT_DIR = output
+OUTPUT_SUBDIR_PLOTS = plots
+OUTPUT_SUBDIR_DATA =  data
+
+DATA = $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications.csv \
+	   $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications-streams.csv
+PLOTS = $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/rfc-annual-publications.png
+HTML = $(OUTPUT_DIR)/index.html
+
+all: $(DATA) $(PLOTS) $(HTML)
+
+# =================================================================================================
+# Generate data
+
+$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-%.csv: bin/fetch-rfc-metrics.py
+	pipenv run python bin/fetch-rfc-metrics.py $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)
+
+# =================================================================================================
+# Generate plots
+
+$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/rfc-%.png: $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications.csv bin/plot-rfc-metrics.py
+	pipenv run python bin/plot-rfc-metrics.py $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS) $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)
+
+# =================================================================================================
+# Generate HTML
+
+$(OUTPUT_DIR)/%.html: bin/generate-html-output.py templates/index.html
+	cp templates/bootstrap.min.css $(OUTPUT_DIR)/bootstrap.min.css
+	cp templates/bootstrap.min.js  $(OUTPUT_DIR)/bootstrap.min.js
+	cp templates/jquery.min.js     $(OUTPUT_DIR)/jquery.min.js
+	pipenv run python bin/generate-html-output.py $(OUTPUT_DIR) $(OUTPUT_SUBDIR_PLOTS)
+
+# =================================================================================================
+# Clean
+
+clean:
+	rm -rf $(OUTPUT_DIR)

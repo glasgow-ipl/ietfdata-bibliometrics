@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ietfdata bibliometrics</title>
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+</head>
+<body style="padding-top: 10px; position: relative;" data-spy="scroll" data-target="#plot-list">
+    <div class="container">
+        <h3>ietfdata bibliometrics</h3>
+        <hr>
+        Report generated on {{ generation_ts.strftime('%d-%m-%Y') }} using <a href="https://github.com/glasgow-ipl/ietfdata">ietfdata</a>.
+        <br><br>
+        <div class="row">
+            <div class="col-md-4" style="width: 20%;">
+                <div id="plot-list" class="list-group" style="top: 10px; position: sticky; position: -webkit-sticky;">
+                    {% for plot in plots %}
+                    <a class="list-group-item list-group-item-action" href="#{{ plot.shortname }}">{{ plot.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div data-spy="scroll" data-target="#plot-list" data-offset="0">
+                    {% for plot in plots %}
+                    <h4 id="{{ plot.shortname }}">{{ plot.name }}</h4>
+                    <img src="{{ plot.path }}" width="100%" />
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
