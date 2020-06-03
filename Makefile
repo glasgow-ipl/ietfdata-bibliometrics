@@ -35,6 +35,7 @@ DATA_FILES = rfc-annual-publications.csv \
 	         rfc-annual-publications-streams.csv \
 	         rfc-annual-publications-areas.csv \
 	         rfc-annual-publications-status.csv \
+			 rfc-monthly-publications.csv \
 
 DATA = $(DATA_FILES:%=$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/%)
 
@@ -43,6 +44,8 @@ PLOT_FILES = rfc-annual-publications.png \
 	         rfc-annual-publications-areas.png \
 	         rfc-annual-publications-status.png \
 			 rfc-annual-publications-areas-norm.png \
+			 rfc-monthly-publications.png \
+			 rfc-monthly-publications-norm.png \
 
 PLOTS = $(PLOT_FILES:%=$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/%)
 

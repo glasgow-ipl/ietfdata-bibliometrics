@@ -90,6 +90,14 @@ def yearly_pub_data_pubstatus(monthly_data, output_filename):
             for status in statuses:
                 output_file.write("%d,%s,%d\n" % (year, status, annual_counts[year].get(status, 0)))
 
+def monthly_pub_data(monthly_data, output_filename):
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    with open(output_filename, "w") as output_file:
+        for year in sorted(list(monthly_data.keys())):
+            annual_count = 0
+            for month in months:
+                output_file.write("%d,%s,%d\n" % (year, month, monthly_data[year].get(month, {"pubs": 0})["pubs"]))
+
 def main():
     ri = rfcindex.RFCIndex()
     rfcs = ri.rfcs()
@@ -114,6 +122,7 @@ def main():
     yearly_pub_data_streams(monthly_data, "%s/rfc-annual-publications-streams.csv" % (output_dir))
     yearly_pub_data_areas(monthly_data, "%s/rfc-annual-publications-areas.csv" % (output_dir))
     yearly_pub_data_pubstatus(monthly_data, "%s/rfc-annual-publications-status.csv" % (output_dir))
+    monthly_pub_data(monthly_data, "%s/rfc-monthly-publications.csv" % (output_dir))
 
 if __name__ == "__main__":
     main()

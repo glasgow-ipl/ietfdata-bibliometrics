@@ -46,6 +46,8 @@ plots = [
             {"name": "RFCs, annual publications (streams)", "path": "%s/rfc-annual-publications-streams.png" % (plot_subdir), "shortname": "rfc-annual-pub-streams"},
             {"name": "RFCs, annual publications (areas)", "path": "%s/rfc-annual-publications-areas.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas"},
             {"name": "RFCs, annual publications (areas, normalised)", "path": "%s/rfc-annual-publications-areas-norm.png" % (plot_subdir), "shortname": "rfc-annual-pub-areas-normalised"},
+            {"name": "RFCs, annual publications (months)", "path": "%s/rfc-monthly-publications.png" % (plot_subdir), "shortname": "rfc-monthly-publications"},
+            {"name": "RFCs, annual publications (months, normalised)", "path": "%s/rfc-monthly-publications-norm.png" % (plot_subdir), "shortname": "rfc-monthly-publications-normalised"},
         ]
 
 with open('%s/index.html' % (output_dir), 'w') as indexHtmlFile:

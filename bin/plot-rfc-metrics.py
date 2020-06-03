@@ -141,3 +141,31 @@ x = sorted(list(annual_pub_data_status.keys()))
 y = [[annual_pub_data_status[year][status] for year in x] for status in statuses]
 
 plot_stack(x, y, 550, statuses, '%s/rfc-annual-publications-status.png' % (output_dir), "Publication Year", "Publication Count")
+
+annual_pub_data_month = {}
+months = []
+
+with open("%s/rfc-monthly-publications.csv" % (input_dir), "r") as monthlyRfcDataFile:
+    for monthlyData in monthlyRfcDataFile:
+        year, month, count = monthlyData[:-1].split(',')
+        if year not in annual_pub_data_month:
+            annual_pub_data_month[year] = {}
+        if month not in months:
+            months.append(month)
+        annual_pub_data_month[year][month] = int(count)
+    for year in annual_pub_data_month:
+        year_total = 0
+        for month in annual_pub_data_month[year]:
+            year_total += annual_pub_data_month[year][month]
+        annual_pub_data_month[year]["total"] = year_total
+
+
+x = sorted(list(annual_pub_data_month.keys()))
+y = [[annual_pub_data_month[year][month] for year in x] for month in months]
+
+plot_stack(x, y, 550, months, '%s/rfc-monthly-publications.png' % (output_dir), "Publication Year", "Publication Count")
+
+x = sorted(list(annual_pub_data_month.keys()))
+y = [[(annual_pub_data_month[year][month]/annual_pub_data_month[year]["total"])*100 for year in x] for month in months]
+
+plot_stack(x, y, 110, months, '%s/rfc-monthly-publications-norm.png' % (output_dir), "Publication Year", "Publication Percentage")
