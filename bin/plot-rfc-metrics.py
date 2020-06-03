@@ -34,14 +34,14 @@ Path(output_dir).mkdir(parents=True, exist_ok=True)
 
 annual_pub_data = {}
 
-def plot_stack(x, y, ylim_top, labels, output_filename):
+def plot_stack(x, y, ylim_top, labels, output_filename, xlabel, ylabel):
     plt.figure(figsize=(15,4))
     fig, ax = plt.subplots()
     ax.set_axisbelow(True)
     ax.grid(True, linewidth=0.5, color='grey', linestyle="dashed")
     plt.xticks(rotation=90)
-    plt.xlabel("Publication Year")
-    plt.ylabel("Publication Count")
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.ylim(top=ylim_top)
     bars = []
     bottom = [0]*len(y[0])
@@ -79,7 +79,7 @@ ax.yaxis.set_ticks_position('both')
 fig.set_size_inches(12, 8)
 fig.savefig('%s/rfc-annual-publications.png' % (output_dir), bbox_inches='tight')
 
-plot_stack(x, y, 550, None, '%s/rfc-annual-publications.png' % (output_dir))
+plot_stack(x, y, 550, None, '%s/rfc-annual-publications.png' % (output_dir), "Publication Year", "Publication Count")
 
 annual_pub_data_streams = {}
 streams = []
@@ -96,7 +96,7 @@ with open("%s/rfc-annual-publications-streams.csv" % (input_dir), "r") as annual
 x = sorted(list(annual_pub_data_streams.keys()))
 y = [[annual_pub_data_streams[year][stream] for year in x] for stream in streams]
 
-plot_stack(x, y, 550, streams, '%s/rfc-annual-publications-streams.png' % (output_dir))
+plot_stack(x, y, 550, streams, '%s/rfc-annual-publications-streams.png' % (output_dir), "Publication Year", "Publication Count")
 
 annual_pub_data_areas = {}
 areas = []
@@ -109,11 +109,21 @@ with open("%s/rfc-annual-publications-areas.csv" % (input_dir), "r") as annualRf
         if area not in areas:
             areas.append(area)
         annual_pub_data_areas[year][area] = int(count)
+    for year in annual_pub_data_areas:
+        year_total = 0
+        for area in annual_pub_data_areas[year]:
+            year_total += annual_pub_data_areas[year][area]
+        annual_pub_data_areas[year]["total"] = year_total
 
 x = sorted(list(annual_pub_data_areas.keys()))
 y = [[annual_pub_data_areas[year][area] for year in x] for area in areas]
 
-plot_stack(x, y, 550, areas, '%s/rfc-annual-publications-areas.png' % (output_dir))
+plot_stack(x, y, 550, areas, '%s/rfc-annual-publications-areas.png' % (output_dir), "Publication Year", "Publication Count")
+
+x = sorted(list(annual_pub_data_areas.keys()))
+y = [[(annual_pub_data_areas[year][area]/annual_pub_data_areas[year]["total"])*100 for year in x] for area in areas]
+
+plot_stack(x, y, 110, areas, '%s/rfc-annual-publications-areas-norm.png' % (output_dir), "Publication Year", "Publication Percentage")
 
 annual_pub_data_status = {}
 statuses = []
@@ -130,4 +140,4 @@ with open("%s/rfc-annual-publications-status.csv" % (input_dir), "r") as annualR
 x = sorted(list(annual_pub_data_status.keys()))
 y = [[annual_pub_data_status[year][status] for year in x] for status in statuses]
 
-plot_stack(x, y, 550, statuses, '%s/rfc-annual-publications-status.png' % (output_dir))
+plot_stack(x, y, 550, statuses, '%s/rfc-annual-publications-status.png' % (output_dir), "Publication Year", "Publication Count")

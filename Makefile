@@ -42,6 +42,7 @@ PLOT_FILES = rfc-annual-publications.png \
 	         rfc-annual-publications-streams.png \
 	         rfc-annual-publications-areas.png \
 	         rfc-annual-publications-status.png \
+			 rfc-annual-publications-areas-norm.png \
 
 PLOTS = $(PLOT_FILES:%=$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/%)
 
