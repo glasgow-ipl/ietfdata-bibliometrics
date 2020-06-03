@@ -31,9 +31,20 @@ OUTPUT_DIR = output
 OUTPUT_SUBDIR_PLOTS = plots
 OUTPUT_SUBDIR_DATA =  data
 
-DATA = $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications.csv \
-	   $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications-streams.csv
-PLOTS = $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/rfc-annual-publications.png
+DATA_FILES = rfc-annual-publications.csv \
+	         rfc-annual-publications-streams.csv \
+	         rfc-annual-publications-areas.csv \
+	         rfc-annual-publications-status.csv \
+
+DATA = $(DATA_FILES:%=$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/%)
+
+PLOT_FILES = rfc-annual-publications.png \
+	         rfc-annual-publications-streams.png \
+	         rfc-annual-publications-areas.png \
+	         rfc-annual-publications-status.png \
+
+PLOTS = $(PLOT_FILES:%=$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/%)
+
 HTML = $(OUTPUT_DIR)/index.html
 
 all: $(DATA) $(PLOTS) $(HTML)
@@ -47,13 +58,13 @@ $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-%.csv: bin/fetch-rfc-metrics.py
 # =================================================================================================
 # Generate plots
 
-$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/rfc-%.png: $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)/rfc-annual-publications.csv bin/plot-rfc-metrics.py
+$(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS)/rfc-%.png: $(DATA) bin/plot-rfc-metrics.py
 	pipenv run python bin/plot-rfc-metrics.py $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_PLOTS) $(OUTPUT_DIR)/$(OUTPUT_SUBDIR_DATA)
 
 # =================================================================================================
 # Generate HTML
 
-$(OUTPUT_DIR)/%.html: bin/generate-html-output.py templates/index.html
+$(OUTPUT_DIR)/%.html: bin/generate-html-output.py templates/index.html $(PLOTS)
 	cp templates/bootstrap.min.css $(OUTPUT_DIR)/bootstrap.min.css
 	cp templates/bootstrap.min.js  $(OUTPUT_DIR)/bootstrap.min.js
 	cp templates/jquery.min.js     $(OUTPUT_DIR)/jquery.min.js
